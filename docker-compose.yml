@@ -1,0 +1,35 @@
+# Local trial run: the app plus a Postgres database, with test sign-in.
+#   docker compose up --build    then open http://localhost:8080
+# Not for production: it uses AUTH_MODE=dev, so everyone is the same test user.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: dashboard
+      POSTGRES_PASSWORD: dashboard
+      POSTGRES_DB: team_dashboard
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dashboard"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://dashboard:dashboard@db:5432/team_dashboard
+      AUTH_MODE: dev
+      DEV_USER_EMAIL: owner@example.com
+      DEV_USER_NAME: Test Owner
+      OWNER_EMAILS: owner@example.com
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  dbdata:

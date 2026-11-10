@@ -1,0 +1,25 @@
+{
+  "name": "team-dashboard",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Team Dashboard v3: the creative team's project, SKU and vendor workspace, as a self-hosted app.",
+  "type": "module",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "AUTH_MODE=dev node --watch server/index.js",
+    "migrate": "node server/migrate.js",
+    "import": "node scripts/import.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.8.0",
+    "express": "5.1.0",
+    "multer": "2.0.2",
+    "pg": "8.16.3",
+    "ws": "8.18.3"
+  }
+}
